@@ -1,17 +1,19 @@
+
 import React, { Component } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup'
 import { Link } from "react-router-dom";
+import Form from 'react-bootstrap/Form'
 import axios from 'axios';
-import AddList from '../components/AddList.jsx';
-import { Fab, Action } from 'react-tiny-fab';
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import 'react-tiny-fab/dist/styles.css';
-
+require('dotenv').config();
 class Home extends Component{
   constructor(props) {
   super(props);
   this.state = {
     uid:null,
-    homedata:{}
+    recenttopics:{topics:[]},
+    generaltopics:{topics:[]}
   }
 
 
@@ -50,9 +52,9 @@ async getHomeForumData (){
         })
     }).then( response => { 
       if (response) {
-        this.setState({homedata:response.data.homedata});
-        
-        console.log(response.data)
+        this.setState({recenttopics:response.data.recent});
+        this.setState({generaltopics:response.data.general});
+        console.log(response.data);
         
       }
       return response;
@@ -81,6 +83,7 @@ async getChecklists (){
     }).then( function(response) { 
       if (response) {
         console.log(response);
+      
         
       }
       return response;
@@ -95,10 +98,29 @@ async getChecklists (){
 
     return (
         <div>
+            <Form.Group>
+            <GooglePlacesAutocomplete
+               apiKey={process.env.PLACES_API}
+               />
+            </Form.Group>
+            <ListGroup>
+            
+                <ListGroup.Item variant="primary">General Travel Adivsor Forum</ListGroup.Item>
+            {this.state.generaltopics.topics.map((list,i) => {
+                return <Link >
+                    <ListGroup.Item>{this.state.generaltopics.topics[i].title}</ListGroup.Item>
+                        </Link>
+            })}
+            </ListGroup>
 
             <ListGroup>
-                <ListGroup.Item variant="primary">Daily Checklists {this.props.username}</ListGroup.Item>
-
+            
+                <ListGroup.Item variant="primary">General Travel Adivsor Forum</ListGroup.Item>
+            {this.state.recenttopics.topics.map((list,i) => {
+                return <Link >
+                    <ListGroup.Item>{this.state.recenttopics.topics[i].title}</ListGroup.Item>
+                        </Link>
+            })}
             </ListGroup>
         </div>
         )

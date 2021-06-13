@@ -199,7 +199,7 @@ app.post("/user", (req, res) => {
 app.post("/home", async (req, res) => {
   console.log(req.body.uid);
   if( req.user) {
-    var data = JSON.stringify(await nodebb.getHomeForumData(req.user.uid));
+    var data = (await nodebb.getHomeForumData(req.user.uid));
     res.json(data);
     res.end();
   }

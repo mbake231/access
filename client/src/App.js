@@ -6,6 +6,7 @@ import Home from './containers/Home';
 import ListView from './containers/ListView';
 import Register from './containers/Register';
 import axios from 'axios';
+import MyNav from './components/MyNav';
 
 class App extends Component {
   constructor() {
@@ -102,6 +103,10 @@ class App extends Component {
 render() {
   return (
     <div id='master-content'>
+          <MyNav username={this.state.username} uid={this.state.uid}>
+         
+            
+        </MyNav>
       <Switch>
         <Route path="/" exact render={(props) => <Home username={this.state.username} uid={this.state.uid} {...props}  />} />
         <Route path="/login" exact render={(props) => <Login login={this.login.bind(this)} {...props}  />} />
