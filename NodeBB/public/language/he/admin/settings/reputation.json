@@ -1,0 +1,22 @@
+{
+	"reputation": "הגדרות מוניטין",
+	"disable": "השבת מערכת המוניטין",
+	"disable-down-voting": "השבת דיסלייק",
+	"votes-are-public": "כל ההצבעות פומביות",
+	"thresholds": "סף פעילות",
+	"min-rep-downvote": "מוניטין מינימלי כדי לפרסם הודעות",
+	"downvotes-per-day": "הצבעות מטה ליום (מוגדרות ל -0 להצבעות למטה ללא הגבלה)",
+	"downvotes-per-user-per-day": "הצבעות למטה למשתמש ליום (מוגדרות ל -0 להצבעות למטה ללא הגבלה)",
+	"min-rep-flag": "מוניטין מינימלי כדי לפרסם הודעות",
+	"min-rep-website": "מוניטין מינימלי להוספת \"אתר\" לפרופיל המשתמש",
+	"min-rep-aboutme": "מוניטין מינימלי להוסיף \"אודותיי\" לפרופיל המשתמש",
+	"min-rep-signature": "מוניטין מינימלי להוספת \"חתימה\" לפרופיל המשתמש",
+	"min-rep-profile-picture": "מוניטין מינימלי להוסיף \"תמונת פרופיל\" לפרופיל המשתמש",
+	"min-rep-cover-picture": "מוניטין מינימלי להוסיף \"תמונת שער\" לפרופיל המשתמש",
+
+	"flags": "Flag Settings",
+	"flags.limit-per-target": "מספר הפעמים המרבי שניתן לסמן משהו",
+	"flags.limit-per-target-placeholder": "Default: 0",
+	"flags.limit-per-target-help": "When a post or user is flagged multiple times, each additional flag is considered a &quot;report&quot; and added to the original flag. Set this option to a number other than zero to limit the number of reports an item can receive.",
+	"flags.auto-resolve-on-ban": "Automatically resolve all of a user's tickets when they are banned"
+}
