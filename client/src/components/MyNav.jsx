@@ -58,14 +58,14 @@ class MyNav extends Component {
       else {
         button = <div>
                     Welcome {this.props.username} 
-                    <Link variant="outline-primary" to={process.env.REACT_APP_FORUM_URL+'/user/'+this.props.username}>Profile</Link>
+                    <a href={'/profile'}>Profile</a>
                     <a href={'/forum/'}>List</a>
                     <Button variant="outline-primary" onClick={this.logOutClick}>Logout</Button>
                 </div>
       }
         return (
         <Navbar>
-            <Navbar.Brand href="#home">access.</Navbar.Brand>
+            <Navbar.Brand href="/">access.</Navbar.Brand>
             <Navbar.Toggle />
               <Navbar.Collapse className="justify-content-end">
                 {button}

@@ -4,9 +4,12 @@ import { BrowserRouter,Route,Switch,Link } from "react-router-dom";
 import Login from './containers/Login';
 import Home from './containers/Home';
 import ListView from './containers/ListView';
+import View from './containers/View';
 import Register from './containers/Register';
 import axios from 'axios';
 import MyNav from './components/MyNav';
+import Profile from './containers/Profile';
+
 import ReactDOM from "react-dom";
 require('dotenv').config()
 
@@ -113,8 +116,10 @@ render() {
       
       <Switch>
         <Route path="/" exact render={(props) => <Home username={this.state.username} uid={this.state.uid} {...props}  />} />
+        <Route path="/profile" exact render={(props) => <Profile username={this.state.username} uid={this.state.uid} {...props}  />} />
         <Route path="/login" exact render={(props) => <Login login={this.login.bind(this)} {...props}  />} />
         <Route path="/register" exact render={(props) => <Register {...props}  />} />
+        <Route path="/view*" exact render={(props) => <View {...props}  />} />
         <Route exact path="/list" exact render={(props) => <ListView {...props}  />} />
       </Switch>
       </BrowserRouter>
