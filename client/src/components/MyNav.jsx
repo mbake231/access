@@ -8,6 +8,7 @@ import {
   Nav
 } from 'react-bootstrap';
 import axios from 'axios';
+require('dotenv').config();
 
 class MyNav extends Component {
   constructor(){
@@ -57,7 +58,8 @@ class MyNav extends Component {
       else {
         button = <div>
                     Welcome {this.props.username} 
-                    <Link variant="outline-primary" to={'/forum/user/'+this.props.username}>Profile</Link>
+                    <Link variant="outline-primary" to={process.env.REACT_APP_FORUM_URL+'/user/'+this.props.username}>Profile</Link>
+                    <a href={'/forum/'}>List</a>
                     <Button variant="outline-primary" onClick={this.logOutClick}>Logout</Button>
                 </div>
       }

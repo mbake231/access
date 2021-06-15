@@ -48,7 +48,8 @@ app.use(
     saveUninitialized: true,
     cookie:{secure:false, maxAge: 24 * 60 * 60 * 1000},
     proxy: true,
-    domain:'localhost'
+    domain:'localhost',
+    samesite:'none'
   })
 );
 
@@ -91,7 +92,6 @@ app.post("/login", function (req, res, next) {
   },
   passport.authenticate("local"),
   (req, res) => {
-    console.log("logged in", req);
     var userInfo = {
       username: req.user._id,
     };
@@ -197,7 +197,6 @@ app.post("/user", (req, res) => {
 });
 
 app.post("/home", async (req, res) => {
-  console.log(req.body.uid);
   if( req.user) {
     var data = (await nodebb.getHomeForumData(req.user.uid));
     res.json(data);

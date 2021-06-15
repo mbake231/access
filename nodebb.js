@@ -11,7 +11,7 @@ function makeUser(user){
         ;
 
     axios
-        .post('http://localhost/forum/api/v3/users?_uid=1', 
+        .post(process.env.FORUM_URL+'/api/v3/users?_uid=1', 
         payload,
             {
             headers: {
@@ -32,7 +32,7 @@ async function getHomeForumData(uid) {
                 recent:null};
 
     await axios
-        .get('http://localhost/forum/api/recent?_uid='+uid, 
+        .get(process.env.FORUM_URL+'/api/recent?_uid='+uid, 
         
             {
             headers: {
@@ -48,7 +48,7 @@ async function getHomeForumData(uid) {
             console.error(error)
         }).then(uid =>
             axios
-            .get('http://localhost/forum/api/category/1?_uid='+uid, 
+            .get(process.env.FORUM_URL+'/api/category/1?_uid='+uid, 
             
                 {
                 headers: {

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route,Switch,Link } from "react-router-dom";
+import { BrowserRouter,Route,Switch,Link } from "react-router-dom";
 import Login from './containers/Login';
 import Home from './containers/Home';
 import ListView from './containers/ListView';
 import Register from './containers/Register';
 import axios from 'axios';
 import MyNav from './components/MyNav';
+import ReactDOM from "react-dom";
+require('dotenv').config()
 
 class App extends Component {
   constructor() {
@@ -78,7 +80,7 @@ class App extends Component {
               if (process.env.NODE_ENV === 'production')
               userurl = 'https://www.thelocalgame.com/login';
               else
-              userurl = 'http://localhost/forum/api/user/'+this.state.username;
+              userurl = process.env.FORUM_URL+'/api/user/'+this.state.username;
                          
               const response =  await axios.get(userurl, {
                 withCredentials: true
@@ -103,17 +105,19 @@ class App extends Component {
 render() {
   return (
     <div id='master-content'>
+    <BrowserRouter>
           <MyNav username={this.state.username} uid={this.state.uid}>
          
             
         </MyNav>
+      
       <Switch>
         <Route path="/" exact render={(props) => <Home username={this.state.username} uid={this.state.uid} {...props}  />} />
         <Route path="/login" exact render={(props) => <Login login={this.login.bind(this)} {...props}  />} />
         <Route path="/register" exact render={(props) => <Register {...props}  />} />
-        <Route path="/list" exact render={(props) => <ListView {...props}  />} />
-        <Route path="/user"  />
+        <Route exact path="/list" exact render={(props) => <ListView {...props}  />} />
       </Switch>
+      </BrowserRouter>
     </div>
   );
 }
