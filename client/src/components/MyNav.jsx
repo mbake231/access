@@ -23,7 +23,7 @@ class MyNav extends Component {
 
  
  onLoginClick  ()  {
-   this.props.toggleLoginModal();
+   
  }
 
  handleClick() {
@@ -53,7 +53,7 @@ class MyNav extends Component {
     render() { 
       let button;
       if(this.props.username==null){
-        button= <Button onClick={this.onLoginClick}>Login</Button>
+        button= <Button href='/login'>Login</Button>
       }
       else {
         button = <div>

@@ -38,7 +38,7 @@ class Profile extends Component{
             
             
            <div id='general' style={this.state.divStyle}>
-              <Iframe url={process.env.REACT_APP_FORUM_URL+"/user/"+this.props.username}
+              <Iframe url={(process.env.REACT_APP_FORUM_URL+"/user/"+this.props.username).replace("/view","")}
                 width="100%"
                 height="100%"
                 id="myId"
