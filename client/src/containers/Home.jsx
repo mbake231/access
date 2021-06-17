@@ -16,7 +16,8 @@ class Home extends Component {
       recenttopics: { topics: [] },
       generaltopics: { topics: [] },
       divStyle: { width: "1000px", height: "400px", overflow: "hidden", top: "-1000px" },
-      forum_url: process.env.REACT_APP_FORUM_URL
+      forum_url: process.env.REACT_APP_FORUM_URL,
+      place_id:null
     }
   };
 
@@ -34,6 +35,9 @@ class Home extends Component {
 
       );
     }
+
+    if(this.state.place_id!==null)
+      this.findPlacePage(this.state.place_id);
   }
 
   async getHomeForumData() {
@@ -86,12 +90,15 @@ class Home extends Component {
     // Check if pid is valid
     if (pid) {
       // Set State
-      this.findPlacePage(addressObject.place_id)
+      //this.history.push('/item/'+pid);
+      this.setState({place_id:pid});
+
     }
   }
 
-findPlacePage() {
-  
+findPlacePage(p) {
+  this.props.history.push('/item/'+p)
+
 }
 
   render() {

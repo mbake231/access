@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter,Route,Switch,Link } from "react-router-dom";
+import { BrowserRouter as Router,Route,Switch,Link } from "react-router-dom";
 import Login from './containers/Login';
 import Home from './containers/Home';
 import ListView from './containers/ListView';
@@ -108,7 +108,7 @@ class App extends Component {
 render() {
   return (
     <div id='master-content'>
-    <BrowserRouter>
+    <Router>
           <MyNav username={this.state.username} uid={this.state.uid}>
          
             
@@ -122,7 +122,7 @@ render() {
         <Route path="/view*" exact render={(props) => <View {...props}  />} />
         <Route exact path="/list" exact render={(props) => <ListView {...props}  />} />
       </Switch>
-      </BrowserRouter>
+      </Router>
     </div>
   );
 }
