@@ -19,6 +19,8 @@ var MongoStore = require("connect-mongo")(session);
 const jwt = require('jsonwebtoken');
 const app = express(); // create express app
 var MongoPool = require("./mongo.js");
+var item = require("./item.js");
+
 var sessionStore = new MongoStore({
   url: process.env.MONGODB_FULL_URL || process.env.MONGO_FULL_URL,
 });
@@ -82,8 +84,6 @@ function generateAccessToken(username) {
 
 // start express server on port 5000
 app.listen(port, () => console.log(`App is live on port ${port}!`));
-
-
 
 
 
@@ -207,4 +207,22 @@ app.post("/home", async (req, res) => {
   }
 });
 
+app.post("/item", async (req, res) => {
+  if( req.user) {
+
+  await item.buildItem('ChIJjT56loFMr4YR-I3fXckHS2Y',function(data){
+    res.json(data);
+  });
+    res.end();
+  }
+  else {
+    res.redirect('/login');
+  }
+});
+
+ item.buildItem('ChIJjT56loFMr4YR-I3fXckHS2Y',function(data){
+  //res.json(data);
+});
+
+//item.getPlacesInfo();
 

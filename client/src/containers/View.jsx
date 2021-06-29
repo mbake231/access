@@ -13,12 +13,10 @@ class Profile extends Component{
   constructor(props) {
   super(props);
   this.state = {
-    uid:null,
-    recenttopics:{topics:[]},
-    generaltopics:{topics:[]},
+
     divStyle: {  width: "100%", height: "500px",frameBorder:'0', zindex:'-999'},
     forum_url:process.env.REACT_APP_FORUM_URL,
-    iframe_url:null
+
   }
    
   

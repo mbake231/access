@@ -3,6 +3,8 @@ import './App.css';
 import { BrowserRouter as Router,Route,Switch,Link } from "react-router-dom";
 import Login from './containers/Login';
 import Home from './containers/Home';
+import Item from './containers/Item';
+
 import ListView from './containers/ListView';
 import View from './containers/View';
 import Register from './containers/Register';
@@ -118,6 +120,8 @@ render() {
         <Route path="/" exact render={(props) => <Home username={this.state.username} uid={this.state.uid} {...props}  />} />
         <Route path="/profile" exact render={(props) => <Profile username={this.state.username} uid={this.state.uid} {...props}  />} />
         <Route path="/login" exact render={(props) => <Login login={this.login.bind(this)} {...props}  />} />
+        <Route path="/item*" exact render={(props) => <Item login={this.login.bind(this)} {...props}  />} />
+
         <Route path="/register" exact render={(props) => <Register {...props}  />} />
         <Route path="/view*" exact render={(props) => <View {...props}  />} />
         <Route exact path="/list" exact render={(props) => <ListView {...props}  />} />
