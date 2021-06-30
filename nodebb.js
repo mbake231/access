@@ -98,17 +98,15 @@ async function getWrittenReviews(tid,uid) {
 
                     //console.log(item_data)
                     await item.getReviewScores("4", item_data, function(score_data){
-                        console.log(score_data);
+                        console.log(score_data)
+                        review_data.push(score_data);
                     });  
             })
         })
         .catch(error => {
             console.error(error)
         })
-            
-
-
-        
+        console.log(review_data)
         return review_data;
 }
 
