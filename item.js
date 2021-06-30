@@ -32,12 +32,19 @@ async function buildItem (id,done) {
     }
     });
     //Go to nodebb to get all the reviews- it will also return scores
-    if(item_details.review_tid)
+
+    await nodebb.getWrittenReviews(item_details.review_tid,'0', function(review_data){
+        if(review_data){
+            item_details.reviews = review_data;
+        }
+    });
+
+   /* if(item_details.review_tid)
         item_details.reviews.push(await nodebb.getWrittenReviews(item_details.review_tid));
     else
-        console.log('')
+        console.log('');*/
     console.log(JSON.stringify(item_details))
-    done(item_details)
+    done(item_details);
 
 }
 
