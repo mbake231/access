@@ -77,7 +77,7 @@ async function findItemData (pid, done) {
             if (err) throw err;
             try {
                 if(res) {
-                    console.log("found it!")
+                  //  console.log("found it!")
                     return done(res);
                 }
                 else
@@ -92,7 +92,7 @@ async function findItemData (pid, done) {
     })
 }
 
-async function getReviewScores (post_id, done) {
+async function getReviewScores (post_id, item_data, done) {
     
     await MongoPool.getInstance(function (db) {
        //MongoPool.connect(url, function (err, db) {
@@ -111,9 +111,11 @@ async function getReviewScores (post_id, done) {
            if (err) throw err;
            try {
                if(res) {
-                   console.log("found it!")
+                  // console.log("found it!")
                   // console.log(res)
-                   return done(res);
+                  item_data.another='scores';
+                  item_data.scores=res;
+                   return done(item_data);
                }
                else
                    console.log('not found')

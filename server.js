@@ -222,6 +222,7 @@ app.post("/item", async (req, res) => {
 
  item.buildItem('ChIJjT56loFMr4YR-I3fXckHS2Y',function(data){
   //res.json(data);
+  console.log(data)
 });
 
 //item.getPlacesInfo();

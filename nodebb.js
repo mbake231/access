@@ -86,31 +86,21 @@ async function getWrittenReviews(tid,uid) {
                 }
         })
         .then(async res => {
-            var ctr=0;
-            //now we need to step through all the posts from nodebb so we can add in the scores that are stored in mongo
-            while(ctr<res.data.posts.length) {                
-                //add numberical review data, we will just pass post_id 4 for now for testing
-                //console.log(ctr)
-                var getScores = async (callback) =>{   
-                        await item.getReviewScores("4", callback, function(score_data){
-                        
-                           return callback(score_data); 
-                        })  
-                }
-                getScores(function(score_data){
-                    console.log(ctr)
-                     })
-                    
-                review_data.push({post_id:res.data.posts[ctr].pid,
-                    review_text:res.data.posts[ctr].content,
-                    username:res.data.posts[ctr].user.username,
-                    timestamp:res.data.posts[ctr].timestamp,
-                    scores:my_scores+"ok"
-                    });
-                    
-                ctr++;            
-            }
-         //   console.log(review_data)
+            Object.keys(res.data.posts).forEach(async ele => {
+
+                
+              //  console.log(res.data.posts[ele].content)
+                var item_data = {post_id:res.data.posts[ele].pid,
+                    review_text:res.data.posts[ele].content,
+                    username:res.data.posts[ele].user.username,
+                    timestamp:res.data.posts[ele].timestamp
+                    }
+
+                    //console.log(item_data)
+                    await item.getReviewScores("4", item_data, function(score_data){
+                        console.log(score_data);
+                    });  
+            })
         })
         .catch(error => {
             console.error(error)
