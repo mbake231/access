@@ -93,7 +93,7 @@ async function findItemData (pid, done) {
 }
 
 async function getReviewScores (post_id, done) {
-       
+    
     await MongoPool.getInstance(function (db) {
        //MongoPool.connect(url, function (err, db) {
        var dbo = null;
@@ -105,13 +105,14 @@ async function getReviewScores (post_id, done) {
            dbo = db.db(process.env.MONGO_DB);
 
        }
-    dbo.collection("reviews").findOne({
+     dbo.collection("reviews").findOne({
            post_id: post_id
        }, async function (err, res) {
            if (err) throw err;
            try {
                if(res) {
                    console.log("found it!")
+                  // console.log(res)
                    return done(res);
                }
                else

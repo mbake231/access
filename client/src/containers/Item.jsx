@@ -67,7 +67,7 @@ async getHomeItemData() {
             Address: {this.state.item_data.address}<br></br>
             Website: <a href={this.state.item_data.website} target="_blank">Click here</a>
             
-   
+            
                  
         </div>
         )
