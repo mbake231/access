@@ -1,9 +1,8 @@
 const axios = require('axios');
 const token = process.env.NODEBB_KEY;
 const item = require('./item.js');
-var my_scores = null;
-var MongoPool = require("./mongo.js");
 
+//this makea a new user in nodebb
 async function makeUser(user,done) {
     console.log(user);
 
@@ -27,7 +26,7 @@ async function makeUser(user,done) {
         })
 
 }
-
+//this posts the review to the right category and saves the review details in mongo
 async function postReview(nodebb_uid,review_package,done) {
     var payload = {
         "cid":review_package.cid,
@@ -51,7 +50,7 @@ async function postReview(nodebb_uid,review_package,done) {
         })
 
 }
-
+//this creates a new category for each time someone looks up a new location
 async function createReviewCategory(place_id,done) {
 
     await item.getPlacesInfo(place_id, async function (res){
@@ -77,7 +76,7 @@ async function createReviewCategory(place_id,done) {
     
 
 }
-
+//this gets recent topics across all categories
 async function getRecentReviews(uid,done) {
     var data = {
         general: null,
@@ -103,86 +102,6 @@ async function getRecentReviews(uid,done) {
         .catch(error => {
             console.error(error)
         })
-        
-        /*.then( async () => {
-            
-            //for each topic look up cid in mongo item get the place_id and then add the right data we need from google
-           // Object.keys(data.recent).forEach(async (ele) => {
-                //  look up place_id in mongo
-                await MongoPool.getInstance(function (db) {
-                    //MongoPool.connect(url, function (err, db) {
-                    var dbo = null;
-            
-                    if (process.env.NODE_ENV == "production") {
-                        dbo = db.db(process.env.PROD_MOGNO_DB);
-            
-                    } else {
-                        dbo = db.db(process.env.MONGO_DB);
-            
-                    }
-                    
-                 const googlename = async (cid,cb) => dbo.collection("items").findOne({
-                        review_cid: cid
-                    }, async function (err, res) {
-                        if (err) throw err;
-                        try {
-                            if(res) {
-                                //console.log("found it!")
-                                
-                                //return done(res);
-                                //now get the google places id
-                                await item.getPlacesInfo(res.place_id,function(google_data){
-                                    //data.recent[ele]["googleName"]=google_data.name;
-                                     return cb(google_data.name);
-                                });
-                            }
-                            else
-                               // console.log('not found')
-                                 return cb(null);
-                        } catch (e) {
-                            console.log(e);
-                            //return done(e);
-                        }
-                        
-                      //  db.close();
-                    });
-                    //data.recent[ele]["googleName"]=googlename();
-                    //i am trying to call googlename n times to add in google name to the thing
-                    var dataPackage = [];
-                    var ctr=data.recent.length;
-                    const package = (dp,cb) => Object.keys(dp).forEach(async (ele)=>{                        
-                        var cid=dp[ele].cid;
-                        const result = cb => googlename(cid,function (resp) {
-                            
-                            cb(resp);  
-                        
-                        });
-                        result(function(res){
-                            if(res===null)
-                                res='Name not found via Google Places.';
-                            dp[ele]['googleName']=res
-                            //console.log(dp)
-                        })
-                        ctr--;
-                        if(ctr===0){
-                            return cb(dp)
-                        }
-                    })
-                  //  console.log(dataPackage)
-                    
-                    package(data.recent, function(result){
-                       // console.log(result)
-                        return done(result);
-                    })
-
-                })
-                
-                
-           // })
-           // console.log(data);
-           // return done(data);
-        })
-    */
 }
 
 //This gets written reviews and adds scores
@@ -202,14 +121,16 @@ async function getWrittenReviews(cid, uid,done) {
         .then(async res => {
             var reviews = [];
             Object.keys(res.data.topics).forEach(async (ele) => {
-                  console.log(res.data.topics[ele])
+                 // console.log(res.data.topics[ele])
                 
                 reviews.unshift ( {
                     topic_id: res.data.topics[ele].tid,
                     review_title: res.data.topics[ele].title,
+                    //this needs to come from nodebb endpoint 
                     review_body: res.data.topics[ele].title,
                     username: res.data.topics[ele].user.username,
                     timestamp: res.data.topics[ele].timestamp,
+                    //this needs to come from mongo
                     scores: {
                         post_id: 4,
                         food: 89,
@@ -218,29 +139,8 @@ async function getWrittenReviews(cid, uid,done) {
                     }
                 })
             })
+
             return done(reviews);
-            /*NEED TO FIX THIS MARRIAGE OF SCORES AND TEXT REVIEWS
-            var ctr=res.data.posts.length;
-            Object.keys(res.data.posts).forEach(async (ele) => {
-                //  console.log(res.data.posts[ele].content)
-                var item_data = {
-                    post_id: res.data.posts[ele].pid,
-                    review_text: res.data.posts[ele].content,
-                    username: res.data.posts[ele].user.username,
-                    timestamp: res.data.posts[ele].timestamp
-                }
-                //console.log(item_data)
-                const getItemDetail = async cb => await item.getReviewScores("4", item_data, function (score_data) {
-                    //review_data.push(score_data);
-                     cb(score_data);
-                    
-                });
-                 getItemDetail(function(output){
-                    review_data.push(output); 
-                })
-            })
-            return done("test"+review_data);
-            */
         })
         .catch(error => {
             console.error(error)

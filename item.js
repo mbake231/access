@@ -54,20 +54,16 @@ async function createItemPage(place_id,done) {
 async function buildItem (id,done) {
     var item_details = {name:null,address:null,photos:[],website:null,review_tid:null,rating:null,reviews:[]}
 
-    //GO to mongo to get topicID
-
+    //GO to mongo to see what categories id maps to the google places id, and if none found make a new item page
     await findItemData(id, async function(mongo_data){
         
         if(mongo_data){
             item_details.review_cid = mongo_data.review_cid;
         }
         else
-            await createItemPage(id);
-        
-            
+            await createItemPage(id);        
     });
-    
-
+    //Go get the google details for the item page
    await getPlacesInfo(id, function(google_data) {
     //Go to google to get places data
     if(google_data) {
@@ -100,23 +96,32 @@ async function buildItem (id,done) {
         }
       }]
 */
-    //Go to nodebb to get all the reviews- it will also return scores
-
-    await nodebb.getWrittenReviews(item_details.review_cid,'1', function(review_data){
+    //Go to nodebb to get all the reviews- go to mongo to get the scores
+    await nodebb.getWrittenReviews(item_details.review_cid,'1', async function(review_data){
         if(review_data){
             item_details.reviews = review_data;
         }
-    });
 
-  // if(item_details.review_tid)
-    //    item_details.reviews.push(await nodebb.getWrittenReviews(item_details.review_tid));
-    //else
-      //  console.log('');
-    //console.log(JSON.stringify(item_details))
-    done(item_details);
+
+        await getReviewScores(item_details.review_cid, function(scores){
+
+            for(var i=0;i<scores.length;i++){
+                for(var p=0;p<item_details.reviews.length;p++){
+                    if(scores[i].topic_id===item_details.reviews[p].topic_id) {
+                        console.log('atch '+scores[i].topic_id+" "+item_details.reviews[p].topic_id)
+                        item_details.reviews[p].scores=scores[i];
+                    }
+                }
+            }
+            console.log(JSON.stringify(item_details))   
+            done(item_details);
+        });
+    });
+    
+   
 
 }
-
+//fetch from google palces
 async function getPlacesInfo  (id,done) {
     try{
     const res = await axios.get(
@@ -132,10 +137,8 @@ async function getPlacesInfo  (id,done) {
          // next(err)
         } 
 }
-
+//get item from mongo via google places id
 async function findItemData (place_id, done) {
-    
-
      await MongoPool.getInstance(function (db) {
         //MongoPool.connect(url, function (err, db) {
         var dbo = null;
@@ -168,10 +171,10 @@ async function findItemData (place_id, done) {
         });
     })
 }
-
-async function getReviewScores (post_id, item_data, done) {
-    
-    await MongoPool.getInstance(function (db) {
+//get the scores 
+async function getReviewScores (cid, done) {
+    var scores=[];
+    await MongoPool.getInstance(async function (db) {
        //MongoPool.connect(url, function (err, db) {
        var dbo = null;
 
@@ -182,17 +185,15 @@ async function getReviewScores (post_id, item_data, done) {
            dbo = db.db(process.env.MONGO_DB);
 
        }
-     dbo.collection("reviews").findOne({
-           post_id: post_id
-       }, async function (err, res) {
-           if (err) throw err;
+       
+      await dbo.collection("reviews").find({cid:cid}).forEach(async function(item){ 
+          // if (err) throw err;
+    
            try {
-               if(res) {
-                  // console.log("found it!")
-                  // console.log(res)
-                  item_data.another='scores';
-                  item_data.scores=res;
-                   return done(item_data);
+               if(item) {
+                   scores.push(item);
+                  
+                   //return done(item_data);
                }
                else
                    console.log('not found')
@@ -203,10 +204,12 @@ async function getReviewScores (post_id, item_data, done) {
            
           // db.close();
        });
+       
+       return done(scores);
    })
 }
 
-
+//add a new review to mongo and to nodebb
 async function createReview(nodebb_uid, review_package) {
     MongoPool.getInstance(function (db) {
         var dbo = null;
