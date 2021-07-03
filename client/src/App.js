@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router,Route,Switch,Link } from "react-router-dom";
+import { BrowserRouter as Router,Route,Switch,Link,withRouter } from "react-router-dom";
 import Login from './containers/Login';
 import Home from './containers/Home';
 import Item from './containers/Item';
-
 import ListView from './containers/ListView';
 import View from './containers/View';
 import Register from './containers/Register';
 import axios from 'axios';
 import MyNav from './components/MyNav';
 import Profile from './containers/Profile';
+import history from "./history.js";
 
-import ReactDOM from "react-dom";
-require('dotenv').config()
+require('dotenv').config();
 
 class App extends Component {
   constructor() {
@@ -25,6 +24,7 @@ class App extends Component {
     this.login = this.login.bind(this);
     this.getData = this.getData.bind(this);
   };
+  
 
   componentDidMount() {
       this.getData();
@@ -47,9 +47,9 @@ class App extends Component {
           })
       }).then( response => { 
         if (response) {
-          this.setState({username:response.data.username});
-          this.setState({uid:response.data.uid});
-          console.log(response.data)
+          this.setState({username:response.data.email});
+          this.setState({uid:response.data.nodebb_uid});
+         // console.log(response.data)
           
         }
         return response;
@@ -85,7 +85,7 @@ class App extends Component {
               if (process.env.NODE_ENV === 'production')
               userurl = 'https://www.thelocalgame.com/login';
               else
-              userurl = process.env.FORUM_URL+'/api/user/'+this.state.username;
+              userurl = process.env.REACT_APP_API_FORUM_URL+'/api/user/'+this.state.username;
                          
               const response =  await axios.get(userurl, {
                 withCredentials: true
@@ -96,9 +96,17 @@ class App extends Component {
                   })
               })
               if (response) {
+               // console.log(response)
                 this.setState({
+                  
                   uid:response.data.uid
-                }, () => {console.log(this.state)});
+                }, () => {
+                  console.log('try');
+                  history.push('/');
+                  window.location.reload();
+
+
+                });
               }
       
             });
@@ -110,10 +118,8 @@ class App extends Component {
 render() {
   return (
     <div id='master-content'>
-    <Router>
-          <MyNav username={this.state.username} uid={this.state.uid}>
-         
-            
+    <Router history={history}>
+          <MyNav username={this.state.username} uid={this.state.uid}> 
         </MyNav>
       
       <Switch>
@@ -131,4 +137,4 @@ render() {
   );
 }
 }
-export default App;
+export default withRouter(App);

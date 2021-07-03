@@ -13,7 +13,7 @@ class Home extends Component {
     super(props);
     this.state = {
       uid: null,
-      recenttopics: { topics: [] },
+      recenttopics: [],
       generaltopics: { topics: [] },
       divStyle: { width: "1000px", height: "400px", overflow: "hidden", top: "-1000px" },
       forum_url: process.env.REACT_APP_FORUM_URL,
@@ -23,6 +23,7 @@ class Home extends Component {
 
   componentDidMount() {
     this.handleScriptLoad();
+    this.getRecentReviews();
   }
 
   componentDidUpdate(prevProps) {
@@ -30,7 +31,7 @@ class Home extends Component {
     if (prevProps.uid != this.props.uid) {
       this.setState({ uid: this.props.uid },
         () => {
-          this.getHomeForumData();
+          this.getRecentReviews();
         }
 
       );
@@ -40,13 +41,13 @@ class Home extends Component {
       this.findPlacePage(this.state.place_id);
   }
 
-  async getHomeForumData() {
+  async getRecentReviews() {
     console.log('uid:' + this.state.uid)
     var url;
     if (process.env.NODE_ENV === 'production')
       url = 'https://www.thelocalgame.com/login';
     else
-      url = 'http://localhost:3000/home';
+      url = 'http://localhost:3000/recentreviews';
     const response = await axios.post(url, { uid: this.state.uid }, {
       withCredentials: true
     }
@@ -57,12 +58,17 @@ class Home extends Component {
         })
     }).then(response => {
       if (response) {
-        this.setState({ recenttopics: response.data.recent });
-        this.setState({ generaltopics: response.data.general });
-        console.log(response.data);
-
+        var data = response.data;
+        data.map((list,i) => {
+          var code = data[i].category.name;
+          console.log(code)
+          console.log(code.indexOf(' &#x2F; '))
+          data[i].category.name = code.substring(0,code.indexOf(' &#x2F; '))
+          data[i]['place_id']=code.substring(code.indexOf(' &#x2F; ')+8)
+        })
+        console.log(data)
+        this.setState({ recenttopics: data });
       }
-      return response;
     })
   }
 
@@ -106,32 +112,29 @@ findPlacePage(p) {
     return (
       <div>
 
-        <SearchBar id="autocomplete" placeholder="" hintText="Search City" value={this.state.query}
+        <SearchBar id="autocomplete" placeholder="Search for anything...." hintText="Search City" value={this.state.query}
           style={{
             margin: '0 auto',
-            maxWidth: 800,
+            maxWidth: 300,
+            backgroundColor:'lightgreen'
           }}
         />
         <ListGroup>
 
-          <ListGroup.Item variant="primary">General Travel Adivsor Forum</ListGroup.Item>
-          {this.state.generaltopics.topics.map((list, i) => {
-            return <Link >
-              <ListGroup.Item>{this.state.generaltopics.topics[i].title}</ListGroup.Item>
-            </Link>
-          })}
-        </ListGroup>
-
-        <ListGroup>
-
-          <ListGroup.Item variant="primary">General Travel Adivsor Forum</ListGroup.Item>
-          {this.state.recenttopics.topics.map((list, i) => {
-            return <a href={this.state.forum_url + '/topic/' + this.state.recenttopics.topics[i].slug} >
-              <ListGroup.Item>{this.state.recenttopics.topics[i].title}</ListGroup.Item>
+          <ListGroup.Item variant="primary">Latest reviews</ListGroup.Item>
+          {this.state.recenttopics.slice(0,9).map((list, i) => {
+            return <a href={'/item/' + this.state.recenttopics[i].place_id} >
+              <ListGroup.Item>Item:{this.state.recenttopics[i].category.name}
+              <br></br>Review title:{this.state.recenttopics[i].title}
+              <br></br>By:{this.state.recenttopics[i].user.username}
+              
+              </ListGroup.Item>
             </a>
 
           })}
         </ListGroup>
+
+        
       </div>
     )
   }

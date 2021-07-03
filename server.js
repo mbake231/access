@@ -131,25 +131,32 @@ app.post("/register", async (req, res) => {
             .collection("Users")
             .findOne({
               email: req.body.email
-            }, function (err, res) {
+            }, async function (err, res) {
               try {
                 if (res == null) {
 
                   var user = {
                     name: req.body.name,
                     email: req.body.email,
-                    password: hashedPassword,
-                    nodebb_uid: null
+                    password: hashedPassword
                   };
-                  dbo
-                    .collection("Users")
-                    .insertOne(user, function (err, result) {
-                      if (err) throw err;
-                      console.log("Inserted: " + result);
-                      scope.send(result);
-                      db.close();
-                      nodebb.makeUser(user);
-                    });
+
+                  await nodebb.makeUser(user, function(uid){
+                      user['nodebb_uid'] = uid;
+                    
+                    dbo
+                      .collection("Users")
+                      .insertOne(user, function (err, result) {
+                        if (err) throw err;
+                        console.log("Inserted: " + result);
+                        scope.send(result);
+                        db.close();
+                        
+                      });
+
+                  });
+
+                  
                 } else {
                   console.log("User with that email already exists");
                   return scope.status(400).send({
@@ -188,19 +195,23 @@ app.post("/logout", async (req, res) => {
 
 app.post("/user", (req, res) => {
   if( req.user) {
-      res.send(user.getUser());
-      res.end();
+      res.send(req.user);
   }
   else {
-    //res.redirect('/login');
+    res.redirect('/login');
   }
 });
 
-app.post("/home", async (req, res) => {
+app.post("/recentreviews", async (req, res) => {
   if( req.user) {
-    var data = (await nodebb.getHomeForumData(req.user.uid));
-    res.json(data);
-    res.end();
+    
+
+    (await nodebb.getRecentReviews(req.user.uid,function(data){
+      res.json(data);
+      res.end();
+
+    }));
+    
   }
   else {
     res.redirect('/login');
@@ -209,8 +220,7 @@ app.post("/home", async (req, res) => {
 
 app.post("/item", async (req, res) => {
   if( req.user) {
-
-  await item.buildItem('ChIJjT56loFMr4YR-I3fXckHS2Y',function(data){
+  await item.buildItem(req.body.item_id,function(data){
     res.json(data);
   });
     res.end();
@@ -220,10 +230,28 @@ app.post("/item", async (req, res) => {
   }
 });
 
- item.buildItem('ChIJjT56loFMr4YR-I3fXckHS2Y',function(data){
-  //res.json(data);
-  console.log(data)
-});
+app.post("/submitReview", async (req, res) => {
+  if( req.user) {
 
-//item.getPlacesInfo();
+    var review_package={
+      cid:req.body.cid,
+      item_id:req.body.item_id,
+      review_title:req.body.review_title,
+      review_body:req.body.review_body,
+      room_score:req.body.room_score,
+      service_score:req.body.service_score,
+      food_score:req.body.food_score,
+      review_type:req.body.review_type
+    }
+    console.log(review_package)
+    await item.createReview(
+      req.user.nodebb_uid,
+      review_package)
+  
+    res.end();
+  }
+  else {
+    res.redirect('/login');
+  }
+});
 

@@ -52,7 +52,7 @@ function initialize(passport, getUserByEmail, getUserById) {
                 } catch (e) {
                     return done(e);
                 }
-                db.close();
+              //  db.close();
             });
         })
     }
@@ -83,7 +83,7 @@ function initialize(passport, getUserByEmail, getUserById) {
             }, function (err, result) {
                 if (err) throw err;
                 //  console.log("Successfully deserailized:"+result._id);
-                db.close();
+             //   db.close();
                 return done(null, result);
                 
             });
