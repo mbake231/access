@@ -6,9 +6,7 @@ const exj = require ('./google_eg.json');
 
 async function createItemPage(place_id,done) {
     //create cat for it
-
     await nodebb.createReviewCategory(place_id, function (cid){
-        
         MongoPool.getInstance(function (db) {
             var dbo = null;
             if (process.env.NODE_ENV == "production") {
@@ -34,7 +32,7 @@ async function createItemPage(place_id,done) {
                         if (err) throw err;
                         console.log("Inserted: " + result);
                         //scope.send(result);
-                      //  return done(true);
+                        return done(cid);
                       });
                   } else {
                     console.log("Item with that place_id already exists");
@@ -61,7 +59,9 @@ async function buildItem (id,done) {
             item_details.review_cid = mongo_data.review_cid;
         }
         else
-            await createItemPage(id);        
+            await createItemPage(id, function(cid){
+              item_details.review_cid=cid;
+            });        
     });
     //Go get the google details for the item page
    await getPlacesInfo(id, function(google_data) {
@@ -100,25 +100,57 @@ async function buildItem (id,done) {
     await nodebb.getWrittenReviews(item_details.review_cid,'1', async function(review_data){
         if(review_data){
             item_details.reviews = review_data;
+            // cb(true);
         }
+    });
 
 
-        await getReviewScores(item_details.review_cid, function(scores){
-
+    await getReviewScores(item_details.review_cid, async function(scores){
             for(var i=0;i<scores.length;i++){
                 for(var p=0;p<item_details.reviews.length;p++){
-                    if(scores[i].topic_id===item_details.reviews[p].topic_id) {
-                        console.log('atch '+scores[i].topic_id+" "+item_details.reviews[p].topic_id)
+                    if(scores[i].topic_id==item_details.reviews[p].topic_id) {
                         item_details.reviews[p].scores=scores[i];
                     }
                 }
-            }
-            console.log(JSON.stringify(item_details))   
-            done(item_details);
+            }      
         });
-    });
-    
-   
+
+        setTimeout(function () {
+            var ctr=0;
+
+            if(ctr!=0)
+                console.log(item_details)
+                return done(item_details)
+            ctr++;
+        }, 500);
+        
+        /*console.log(as2());
+        try {
+            const fart = await as2();
+            console.log(fart);
+        } catch(e) {
+            console.error(e)
+        }
+
+        var as1done = false;
+        var as2done = false;
+
+        await as1(async function(done){
+            if(done) {
+                as1done=true;
+              //  console.log(as1done)
+             await as2(function(donetwo){
+                if(donetwo){
+                    as2done=true; 
+                  //  console.log(as2done)
+                }
+            })
+        }
+        }).then(console.log(item_details))
+      */
+        //while(!as1done&&!as2done)
+          //  console.log('waiting')
+      //  console.log(item_details)
 
 }
 //fetch from google palces

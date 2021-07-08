@@ -56,7 +56,8 @@ async function createReviewCategory(place_id,done) {
     await item.getPlacesInfo(place_id, async function (res){
         var payload = {
             "name": res.name+" /\ "+res.place_id,
-            "description":res.place_id
+            "description":res.place_id,
+            "cloneFromCid": '5'
         };
     
         await axios
@@ -78,6 +79,7 @@ async function createReviewCategory(place_id,done) {
 }
 //this gets recent topics across all categories
 async function getRecentReviews(uid,done) {
+    uid=1;
     var data = {
         general: null,
         recent: null
@@ -104,10 +106,42 @@ async function getRecentReviews(uid,done) {
         })
 }
 
+//get reviews from a certain user
+async function getMyReviews(username,done) {
+    uid=1;
+    var data = [];
+
+    await axios
+        .get(process.env.FORUM_URL + '/api/user/'+username+'/topics?_uid=' + uid,
+
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+        .then(res => {
+            //only return 10 topics
+            console.log(res.data.topics[0].tags)
+            res.data.topics.map((item) => {
+                if(item.tags[0].value==='client' || item.tags[0].value==='advisor') {
+                    data.push(item);
+                }
+            })
+
+            return done(data);
+           // return true;
+            console.log('This wont print because i am short ciruting everything below')
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+}
+
 //This gets written reviews and adds scores
 async function getWrittenReviews(cid, uid,done) {
     //setting this to zero because nodebb demands a uid i think its okay to leave 0 tho
-    uid = 0;
+    uid = 1;
     var review_data = [];
     //  var my_scores;
 
@@ -132,10 +166,7 @@ async function getWrittenReviews(cid, uid,done) {
                     timestamp: res.data.topics[ele].timestamp,
                     //this needs to come from mongo
                     scores: {
-                        post_id: 4,
-                        food: 89,
-                        rooms: 94,
-                        service: 43
+                        
                     }
                 })
             })
@@ -153,3 +184,4 @@ exports.getRecentReviews = getRecentReviews;
 exports.getWrittenReviews = getWrittenReviews;
 exports.createReviewCategory = createReviewCategory;
 exports.postReview = postReview;
+exports.getMyReviews = getMyReviews;

@@ -22,6 +22,7 @@ class Home extends Component {
   };
 
   componentDidMount() {
+
     this.handleScriptLoad();
     this.getRecentReviews();
   }
@@ -81,6 +82,7 @@ class Home extends Component {
     this.autocomplete = new google.maps.places.Autocomplete(
       document.getElementById('autocomplete'),
       options);
+      console.log(this.autocomplete)
     // Avoid paying for data that you don't need by restricting the 
     // set of place fields that are returned to just the address
     // components and formatted address
@@ -112,10 +114,10 @@ findPlacePage(p) {
     return (
       <div>
 
-        <SearchBar id="autocomplete" placeholder="Search for anything...." hintText="Search City" value={this.state.query}
+        <SearchBar id="autocomplete" placeholder="Search for anything...." hintText="Search City" 
           style={{
             margin: '0 auto',
-            maxWidth: 300,
+            maxWidth: 500,
             backgroundColor:'lightgreen'
           }}
         />

@@ -86,11 +86,11 @@ async getHomeItemData() {
                     return  <ListGroup.Item>
                         Date:{this.state.item_data.reviews[i].timestamp}<br></br>
                         Username: {this.state.item_data.reviews[i].username} <br></br>
-                        Food:{parseInt(this.state.item_data.reviews[i].scores.food)/10}<br></br>
-                        Rooms:{parseInt(this.state.item_data.reviews[i].scores.rooms)/10}<br></br>
-                        Service:{parseInt(this.state.item_data.reviews[i].scores.service)/10}<br></br>
+                        Food:{parseInt(this.state.item_data.reviews[i].scores.food_score)}<br></br>
+                        Rooms:{parseInt(this.state.item_data.reviews[i].scores.room_score)}<br></br>
+                        Service:{parseInt(this.state.item_data.reviews[i].scores.service_score)}<br></br>
                         Review Title:{this.state.item_data.reviews[i].review_title}<br></br>
-                        Review Body:{this.state.item_data.reviews[i].review_body}
+                        Review Body:{this.state.item_data.reviews[i].scores.review_body}
                         </ListGroup.Item>
                    
                 }))

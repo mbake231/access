@@ -48,6 +48,7 @@ async function  submitReview() {
         })
     })
     if (response) {
+      console.log(props.item_cid)
         window.location.reload();
      props.toggleCreateReviewModal();
      

@@ -20,6 +20,7 @@ const jwt = require('jsonwebtoken');
 const app = express(); // create express app
 var MongoPool = require("./mongo.js");
 var item = require("./item.js");
+const { Console } = require("console");
 
 var sessionStore = new MongoStore({
   url: process.env.MONGODB_FULL_URL || process.env.MONGO_FULL_URL,
@@ -194,17 +195,19 @@ app.post("/logout", async (req, res) => {
 });
 
 app.post("/user", (req, res) => {
-  if( req.user) {
+
+  if(req.user) {
+    
       res.send(req.user);
   }
   else {
-    res.redirect('/login');
+   // res.redirect('/signin');
+   res.end();
   }
 });
 
 app.post("/recentreviews", async (req, res) => {
   if( req.user) {
-    
 
     (await nodebb.getRecentReviews(req.user.uid,function(data){
       res.json(data);
@@ -218,12 +221,29 @@ app.post("/recentreviews", async (req, res) => {
   }
 });
 
-app.post("/item", async (req, res) => {
+app.post("/myreviews", async (req, res) => {
+  console.log(req.user)
   if( req.user) {
-  await item.buildItem(req.body.item_id,function(data){
-    res.json(data);
-  });
-    res.end();
+
+    (await nodebb.getMyReviews(req.user.email,function(data){
+      res.json(data);
+      res.end();
+
+    }));
+    
+  }
+  else {
+    res.redirect('/login');
+  }
+});
+
+app.post("/item", async (req, res) => {
+  console.log(req.user)
+  if( req.user) {
+    await item.buildItem(req.body.item_id,function(data){
+      res.json(data);
+    });
+   // res.end();
   }
   else {
     res.redirect('/login');
@@ -231,6 +251,7 @@ app.post("/item", async (req, res) => {
 });
 
 app.post("/submitReview", async (req, res) => {
+
   if( req.user) {
 
     var review_package={
