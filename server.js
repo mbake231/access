@@ -202,7 +202,9 @@ app.post("/user", (req, res) => {
   }
   else {
    // res.redirect('/signin');
-   res.end();
+   res.status(401).send({
+       message: 'Unauthorized'
+ });
   }
 });
 

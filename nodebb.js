@@ -57,7 +57,7 @@ async function createReviewCategory(place_id,done) {
         var payload = {
             "name": res.name+" /\ "+res.place_id,
             "description":res.place_id,
-            "cloneFromCid": '5'
+            "cloneFromCid": '21'
         };
     
         await axios
@@ -96,7 +96,16 @@ async function getRecentReviews(uid,done) {
         .then(res => {
             //only return 10 topics
             data.recent = res.data.topics.slice(0,9);
-            return done(data.recent);
+            var data_final = [];
+           // console.log(data.recent)
+            data.recent.map((item,i) => {
+                if(item.tags[0])
+                    if(item.tags[0].value==='client' || item.tags[0].value==='advisor') {
+                      data_final.push(item);
+                }
+            })
+
+            return done(data_final);
            // return true;
             console.log('This wont print because i am short ciruting everything below')
 
@@ -121,7 +130,7 @@ async function getMyReviews(username,done) {
             })
         .then(res => {
             //only return 10 topics
-            console.log(res.data.topics[0].tags)
+
             res.data.topics.map((item) => {
                 if(item.tags[0].value==='client' || item.tags[0].value==='advisor') {
                     data.push(item);
