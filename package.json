@@ -4,7 +4,9 @@
   "description": "want to change? run a checklist",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm build",
+    "start": "node server.js && (cd client && npm start) && (cd ../NodeBB && ./nodebb start)"
   },
   "author": "",
   "license": "ISC",

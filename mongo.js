@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var url = process.env.MONGO_FULL_URL;
+var url = process.env.MONGODB_FULL_URL || process.env.ORMONGO_RS_URL;
 var dbname='';
 
 function setDbName() {
