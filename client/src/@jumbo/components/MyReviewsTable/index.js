@@ -127,7 +127,7 @@ const MyReviewsTable = () => {
       })
       .then(response => {
         if (response.data) {
-          console.log(response.data);
+          
           var data_grid = [];
           response.data.map(item => {
             data_grid.push(
