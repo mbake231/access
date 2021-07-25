@@ -93,7 +93,7 @@ const ReviewCreator = props => {
   const submitReview = () => {
     var url;
     if (process.env.NODE_ENV === "production")
-      url = "https://www.thelocalgame.com/login";
+      url = process.env.REACT_APP_PROD_URL+"/submitReview";
     else url = "http://localhost:3000/submitReview";
     axios.defaults.withCredentials = true;
 

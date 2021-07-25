@@ -28,7 +28,7 @@ const BasicAuth = {
 
         var url;
         if (process.env.NODE_ENV === "production")
-          url = "https://www.thelocalgame.com/login";
+          url = process.env.REACT_APP_PROD_URL+"/login";
         else url = "http://localhost:3000/login";
 
         axios
@@ -83,7 +83,7 @@ const BasicAuth = {
 
       var userurl;
       if (process.env.NODE_ENV === "production")
-        userurl = "https://www.thelocalgame.com/user";
+        userurl = process.env.REACT_APP_PROD_URL+"/user";
       else userurl = "http://localhost:3000/user";
       axios.defaults.withCredentials = true;
    

@@ -118,7 +118,7 @@ const RecentReviewsTable = () => {
   const getRecentReviews = () => {
     var url;
     if (process.env.NODE_ENV === "production")
-      url = "https://www.thelocalgame.com/login";
+      url = process.env.REACT_APP_PROD_URL+"/recentreviews";
     else url = "http://localhost:3000/recentreviews";
     axios.defaults.withCredentials = true;
     axios
