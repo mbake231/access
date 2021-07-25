@@ -23,7 +23,7 @@ var item = require("./item.js");
 const { Console } = require("console");
 
 var sessionStore = new MongoStore({
-  url: process.env.MONGODB_FULL_URL || process.env.ORMONGO_URL+'/mydb',
+  url: process.env.MONGODB_FULL_URL || process.env.ORMONGO_URL,
 });
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
