@@ -31,7 +31,7 @@ function MongoPool(){}
 var p_db;
 
 function initPool(cb){
-  MongoClient.connect(url, {useUnifiedTopology: true,useNewUrlParser: true }, function(err, db) {
+  MongoClient.connect(url, {useUnifiedTopology: true,useNewUrlParser: true ,retryWrites:false}, function(err, db) {
     if (err) throw err;
 
     p_db = db;
