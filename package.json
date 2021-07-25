@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd client && npm build",
-    "start": "node server.js && (cd client && npm start) && (cd ../NodeBB && ./nodebb start)"
+    "start": "node server.js && (cd client && npm start) && (cd ../NodeBB && ./nodebb start)",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+
   },
   "author": "",
   "license": "ISC",
