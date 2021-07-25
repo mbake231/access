@@ -93,7 +93,7 @@ async function getRecentReviews(uid,done) {
                     Authorization: `Bearer ${token}`
                 }
             })
-        .then(res => {
+        .then(res => { 
             //only return 10 topics
             data.recent = res.data.topics.slice(0,9);
             var data_final = [];
