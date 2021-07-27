@@ -92,7 +92,7 @@ const BasicAuth = {
           withCredentials: true
         })
         .then(response => {
-          console.log(response)
+          console.log(response);
           if (response.data) {
            
             
@@ -108,7 +108,7 @@ const BasicAuth = {
         }).catch((error)=> {
         //  dispatch(fetchSuccess());
           
-          console.log('fart')
+          console.log(error)
           dispatch(updateLoadUser(true));
         })
         
