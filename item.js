@@ -116,7 +116,7 @@ async function buildItem (id,done) {
         });
 
         setTimeout(function () {
-            var ctr=0;
+            var ctr=0; 
 
             if(ctr!=0)
                 console.log(item_details)
