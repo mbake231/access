@@ -22,5 +22,5 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "content_security_policy": "script-src 'self' 'unsafe-inline' https://*.googleapis.com https://maps.gstatic.com 'unsafe-eval'"
+  "content_security_policy": "script-src 'self' https://maps.googleapis.com https://*.googleapis.com https://maps.gstatic.com"
 }
