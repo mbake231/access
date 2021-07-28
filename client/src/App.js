@@ -8,6 +8,7 @@ import configureStore, {history} from "./redux/store";
 import AppWrapper from "./@jumbo/components/AppWrapper";
 import AppContextProvider from "./@jumbo/components/contextProvider/AppContextProvider";
 import Routes from "./routes";
+require('dotenv').config();
 
 export const store = configureStore();
 

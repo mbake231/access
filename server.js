@@ -1,7 +1,8 @@
 //var MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
 const path = require("path");
-const express = require("express");
+const express = require("express")
+, https = require("https");
 var bodyParser = require("body-parser");
 const nodebb = require('./nodebb.js'); // create express app
 const user = require('./user.js'); // create express app
@@ -71,7 +72,7 @@ app.use(express.urlencoded({
 }));
 
 
-
+/*
 app.use(function (req, res, next) {
   if (req.secure) {
     // request was via http, so do no special handling
@@ -80,7 +81,7 @@ app.use(function (req, res, next) {
     // request was via http, so do no special handling
     next();
   }
-});
+});*/
 
 app.use(passport.initialize());
 app.use(passport.session());
