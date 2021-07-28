@@ -30,6 +30,10 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(hpp());
 
+app.use(function(req, res, next) {
+  res.setHeader("Content-Security-Policy", "script-src 'self' https://maps.googleapis.com https://*.googleapis.com https://maps.gstatic.com");
+  return next();
+});
 
 require("./mongo.js").initPool();
 
