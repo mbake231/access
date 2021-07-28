@@ -22,5 +22,5 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "content_security_policy": "connect-src google.com maps.googleapis.com fonts.googleapis.com maps.gstatic.com ; script-src 'self' fonts.googleapis.com google.com maps.gstatic.com maps.googleapis.com 'unsafe-eval' fonts.googleapis.com google.com maps.gstatic.com maps.googleapis.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-inline' https://*.googleapis.com https://maps.gstatic.com 'unsafe-eval'"
 }
