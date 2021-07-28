@@ -22,5 +22,5 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
-  "content_security_policy": "script-src 'self' https://maps.googleapis.com https://maps.googleapis.com/*; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://maps.googleapis.com/maps/api/js?key=AIzaSyC05tPzPeNGHpVEUu0PyyiVokuJ0G1Q7cI&libraries=places; object-src 'self' https://maps.googleapis.com/maps/api/js?key=AIzaSyC05tPzPeNGHpVEUu0PyyiVokuJ0G1Q7cI&libraries=places"
 }
