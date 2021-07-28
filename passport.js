@@ -2,8 +2,16 @@ var MongoClient = require('mongodb').MongoClient;
 require('dotenv').config();
 var MongoPool = require("./mongo.js");
 
-var url = process.env.MONGODB_URI || process.env.MONGO_FULL_URL;
+
 var dbname = '';
+var url;
+if (process.env.NODE_ENV == 'production') {
+    url = process.env.ORMONGO_URL; 
+} else {
+    url = process.env.MONGODB_URI || process.env.MONGO_FULL_URL;
+
+}
+
 const bcrypt = require('bcrypt');
 
 const LocalStrategy = require('passport-local').Strategy;
