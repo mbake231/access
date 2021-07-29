@@ -24,7 +24,6 @@ var item = require("./item.js");
 const { Console } = require("console");
 
 
-console.log(process.env.ORMONGO_URL)
 var sessionStore = new MongoStore({
   url: process.env.MONGODB_FULL_URL || process.env.ORMONGO_URL,
  // url:  process.env.ORMONGO_URL
@@ -113,9 +112,7 @@ app.post("/login", function (req, res, next) {
       username: req.user._id,
     };
     //generate token for session sharing
-    console.log(req.user.email);
     const token = generateAccessToken({ id:req.user._id, username: req.user.email });
-    console.log(token);
     res.json(token);
     //res.send(userInfo);
     res.end();
@@ -143,7 +140,6 @@ app.post("/register", async (req, res) => {
             dbo = db.db(process.env.MONGO_DB);
 
           }
-          console.log(req.body.email)
           dbo
             .collection("Users")
             .findOne({
@@ -240,7 +236,6 @@ app.post("/recentreviews", async (req, res) => {
 });
 
 app.post("/myreviews", async (req, res) => {
-  console.log(req.user)
   if( req.user) {
 
     (await nodebb.getMyReviews(req.user.email,function(data){
@@ -256,7 +251,6 @@ app.post("/myreviews", async (req, res) => {
 });
 
 app.post("/item", async (req, res) => {
-  console.log(req.user)
   if( req.user) {
     await item.buildItem(req.body.item_id,function(data){
       res.json(data);
@@ -282,7 +276,6 @@ app.post("/submitReview", async (req, res) => {
       food_score:req.body.food_score,
       review_type:req.body.review_type
     }
-    console.log(review_package)
     await item.createReview(
       req.user.nodebb_uid,
       review_package)

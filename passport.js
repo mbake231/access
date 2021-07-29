@@ -58,6 +58,7 @@ function initialize(passport, getUserByEmail, getUserById) {
                         })
                     }
                 } catch (e) {
+                    console.log('hi')
                     return done(e);
                 }
               //  db.close();
@@ -85,7 +86,7 @@ function initialize(passport, getUserByEmail, getUserById) {
         //return done(null, function (id) {
         MongoPool.getInstance(function (db) {
         //MongoClient.connect(url, function (err, db) {
-            if (err) throw err;
+           // if (err) throw err;
             var dbo = db.db(dbname);
             dbo.collection("Users").findOne({
                 "_id": ObjectId(id)

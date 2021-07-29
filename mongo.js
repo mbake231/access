@@ -1,5 +1,8 @@
+require("dotenv").config();
 var MongoClient = require('mongodb').MongoClient;
-var url = process.env.MONGODB_FULL_URL || process.env.ORMONGO_RS_URL;
+//var url = process.env.MONGODB_FULL_URL || process.env.ORMONGO_RS_URL;
+var url =  process.env.ORMONGO_URL;
+
 var dbname='';
 
 function setDbName() {
@@ -31,7 +34,7 @@ function MongoPool(){}
 var p_db;
 
 function initPool(cb){
-  MongoClient.connect(url, {useUnifiedTopology: true,useNewUrlParser: true ,retryWrites:false}, function(err, db) {
+  MongoClient.connect(url, {useUnifiedTopology: true,useNewUrlParser: true}, function(err, db) {
     if (err) throw err;
 
     p_db = db;
