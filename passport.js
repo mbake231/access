@@ -83,7 +83,8 @@ function initialize(passport, getUserByEmail, getUserById) {
 
     passport.deserializeUser((id, done) => {
         //return done(null, function (id) {
-        MongoClient.connect(url, function (err, db) {
+        MongoPool.getInstance(function (db) {
+        //MongoClient.connect(url, function (err, db) {
             if (err) throw err;
             var dbo = db.db(dbname);
             dbo.collection("Users").findOne({

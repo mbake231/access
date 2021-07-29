@@ -23,9 +23,15 @@ var MongoPool = require("./mongo.js");
 var item = require("./item.js");
 const { Console } = require("console");
 
+
+console.log(process.env.ORMONGO_URL)
 var sessionStore = new MongoStore({
   url: process.env.MONGODB_FULL_URL || process.env.ORMONGO_URL,
+ // url:  process.env.ORMONGO_URL
+
 });
+
+
 app.use(cors({ origin: true, credentials: true }));
 app.use(cookieParser());
 app.use(helmet());
